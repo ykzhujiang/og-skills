@@ -63,6 +63,22 @@ gh api -X PATCH repos/OWNER/REPO -F has_discussions=true
 
 Everything else is worked out on the first run and remembered. Every run tells you which repo it wrote to, in one line.
 
+## What lands, and where
+
+Three artefacts with three jobs, and no restating between them:
+
+| artefact | job | mutability |
+|---|---|---|
+| **Top post** | the current picture, in a neutral voice | rewritten each run |
+| **Session comment** | what this round changed, one line + a transcript link | append-only |
+| **Transcript** | what was actually said, verbatim | immutable, in git |
+
+Transcripts land under `discussions/<slug>/<date-time>.md` — grouped by **topic**, not by session, because one topic spans many sessions and one session covers many topics. Only the increment is uploaded each time; the watermark sits in the file header.
+
+**Nothing is published without your go-ahead.** The skill shows you the body, the upload range, and anything it judges sensitive — then waits.
+
+Every AI-written post carries a `📝 代写` byline, so **a human reply is distinguishable by its absence**. That is a convention rather than a guarantee: the GitHub author field shows whoever's token was used, so it cannot do this job.
+
 ## What a thread looks like to read
 
 A human reads roughly **a third** of a thread by default, and loses access to none of it.
