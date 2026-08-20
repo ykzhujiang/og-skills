@@ -121,29 +121,32 @@ Do not address the thread's author in your briefing. You are not talking to them
 
 > This is the failure mode observed in the first real multi-party test. The joining agent read the thread, produced its own critique with recommended answers, and addressed the thread's owner directly — never briefing its own human at all. The analysis itself was good and one gap it found was real; the error was treating its own conclusions as the contribution.
 
-### The briefing: four lines, no opinions
+### The briefing: four lines
 
-**Goal: your human understands the thread without opening it.** Everything else is a click away, and a briefing they have to work through defeats having read it for them.
+**Goal: your human understands the thread without opening it.** Everything else is a click away.
 
 ```markdown
-📄 <thread url>（逐字对话已读 119KB）
+📄 <thread url>
 
 **在讲什么：** <one line>
-**目前结论：** <one line — the latest state, not a history>
-**还没定的：** <one line — the open questions, compressed>
+**目前结论：** <one line>
+**还没定的：** <one line>
 ```
 
-Then one closing line: ask what they want to do, or — if the thread marks an item `等 <their name>` — say so plainly, because that is the one thing addressed to them personally.
+Then one closing line: ask what they want to do — or, if the thread marks an item `等 <their name>`, say so plainly, because that is the one thing addressed to them personally.
 
-**Hold your observations back.** Do not put your analysis, gaps you spotted, or recommended answers in the briefing. Reasons:
+**Nothing else goes in.** No observations, no analysis, no recommended answers, and no report on your own process — not even whether you read the transcripts. Every one of those is a line your human has to read to discover it was not for them.
 
-- It doubles the length, and length is what stops the briefing being read.
-- **It anchors your human onto your framing** before they have their own. What follows is then their reaction to you, not their view.
-- Most briefings need no action. Loading every one with critique spends your human's attention on threads they were going to skip.
+- Observations **anchor them onto your framing** before they have their own view; what follows is then a reaction to you, not a judgement. Keep them ready, offer them in one line — *"我有几条观察，要听吗"* — and deliver only if asked. **Being asked is the signal they are wanted.**
+- Your process is your business. You are still **required** to read the transcripts rather than trust the summary; you just do not announce it. Say so if they ask.
 
-Keep them ready. Offer them in one short line — *"我有几条观察，要听吗"* — and deliver only if asked. **Being asked is the signal that they are wanted.**
+### Summarise the whole thread, not the top post
 
-The read-the-transcripts claim stays, compressed to a parenthetical on the link line. It is the one thing your human cannot check without redoing your work, and the approach depends on someone doing that check — but it does not need a paragraph.
+**Read the top post *and* every comment and reply, and summarise all of it.** The top post is not the thread — it is one AI's compression of the thread, refreshed only when that AI last ran.
+
+This is a correctness requirement, not thoroughness. **A human contribution reaches the top post only when the owning agent next runs.** Until then it exists solely in the comments. So a briefing built from the top post alone will report a conclusion as settled while a reply underneath it says otherwise — and will do it confidently, because the top post genuinely says that.
+
+When a comment contradicts or qualifies the top post, **the briefing follows the comment and says the state is contested.** The comments are newer than the compression.
 
 **Analysis is wanted. Authorship is not.** Bring your human sharp observations, including uncomfortable ones. Then stop and let them decide what, if anything, becomes a contribution.
 
@@ -593,7 +596,8 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
-- **A briefing is four lines and carries no opinions.** Link, 在讲什么, 目前结论, 还没定的 — enough to understand the thread without opening it. Hold your observations and offer them in one line; being asked is the signal they are wanted. Leading with analysis anchors your human onto your framing before they have their own.
+- **A briefing is four lines.** Link, 在讲什么, 目前结论, 还没定的. No observations, no analysis, no report on your own process. Hold observations and offer them in one line; being asked is the signal they are wanted.
+- **Summarise the whole thread, including comments and replies.** The top post is one AI's compression, refreshed only when that AI last ran; a human contribution lives only in the comments until then. A briefing from the top post alone will confidently report a settled conclusion that a reply beneath it already contests.
 - **Arriving at someone else's thread makes you a reader, not a party.** Brief your own human first; publish only what they decide. Never open with your own verdict — it anchors them onto your view instead of surfacing theirs.
 - **Read comments *and* replies every run.** A reply nested under a comment is the most natural way for a human to answer a specific round, and nothing else in this skill will surface it — a comment does not move `lastEditedAt`.
 - **Every human contribution gets a recorded destination**, including "changes nothing, acknowledged". Not everything becomes state; everything gets a judgement.
