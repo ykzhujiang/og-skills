@@ -246,27 +246,39 @@ Nothing is *lost* to the fold: `<details>` is a display default, not a deletion.
 
 ## Voice
 
-**Write the body as an outside observer describing a discussion between people and an AI** — not as the AI addressing a reader, and not as the human's own notes.
+**The body holds conclusions and disagreements. It does not narrate the discussion.**
 
+A reader arriving cold needs four answers: where does this stand, what is still open, what has been concluded, and what needs them. None of those require knowing who proposed what to whom, in which order, and who conceded. That is the process, and the process belongs in the transcript.
+
+State each conclusion **impersonally, with its reason, and stop**:
+
+```markdown
+✅  不禁止人类手改帖子。禁止会摧毁选 Discussions 的理由，且每人都有评论框、
+    规则不可执行。健壮性放代码里，不放人的自觉里。
+
+❌  朱江曾提议全员只能通过 AI 操作，小习指出这会摧毁选 Discussions 的理由，
+    且 GitHub 给每人一个评论框、规则不可执行；朱江接受。结论：健壮性放代码里。
 ```
-讨论中朱江主张「AI 是助手、主体是人」，小习指出该表述回答的是归属问题
-而非机制问题；朱江认可后请小习给出方案。
-```
 
-One sentence carries who proposed what, who objected, and how it resolved. This is why the body needs no per-item author tags: **the neutral voice puts attribution inside the prose**, where a tag would have to be bolted onto the format.
+Both carry the same conclusion and the same reason. The second adds a negotiation the reader did not ask for. Measured on a real thread, stripping the narration cut `Settled` by **38%** with no loss of content.
 
-The pairing to hold onto:
+**This supersedes an earlier instruction to write the body as an outside observer of the discussion.** That instruction was introduced to fix attribution, and it does — but describing an exchange *is* narrating process, so it produced exactly the bloat this section now forbids. The two goals are reconciled below.
 
-| | says |
-|---|---|
-| the `AI 代写` byline | **who typed it** |
-| the neutral voice | **whose thinking it is** |
+### Where attribution goes instead
 
-### The trap in this, stated plainly
+| | names? | why |
+|---|---|---|
+| `Settled`, `Ruled out`, `Verified facts` | **no** | These are agreed. Who first said an agreed thing is history, and history is in the transcript. |
+| `Disagreement` | **required** | Here the holder *is* part of the content. A position without its holder cannot be answered. |
+| Transcript | inherent | Every line is attributed by construction. |
 
-**The one writing the neutral account is the AI itself.** Choosing how to characterise your own position and the human's is an editorial act, and it is entirely possible to sound impartial while quietly making your own case look better. That failure is *harder* to catch than obvious partisanship.
+Dropping names from the agreed sections is not a loss of accountability — it moves accountability to the two places that can carry it properly, and stops the summary from re-litigating settled questions.
 
-Neutral voice is safe under exactly one condition: **the verbatim transcript sits beside it, so any characterisation can be checked.** This is the reason Step 4 is not optional.
+### The trap in writing your own summary
+
+**The one summarising is the AI.** Choosing which conclusions to record, and how to phrase the reasons, is an editorial act; it is entirely possible to sound impartial while quietly making your own case look better — a failure *harder* to catch than open partisanship.
+
+This is safe under exactly one condition: **the verbatim transcript sits beside it and any claim can be checked.** Publishing the summary alone is not a lighter version of this skill; it removes the only thing that makes the summary auditable.
 
 ### Byline
 
@@ -292,9 +304,9 @@ slug: multi-party-approval
 
 # [multi-party-approval] 多人批准与推翻规则
 
-> 📝 本帖由小习（AI）代写。逐字对话见各 session 评论中的链接。
+> 📝 本帖由小习（AI）代写。只记结论与分歧，过程见逐字对话链接。
 
-**Now:** <one tweet, neutral voice: what this discussion has reached and why it matters now.>
+**Now:** <one tweet: what has been reached, and whether it is usable. Not how it got there.>
 **Needs you:** <the single thing waiting on this reader — or `nothing`.>
 
 ## Still open
@@ -360,7 +372,7 @@ What survives has a job:
 
 **S3** · 2026-08-20 · 朱江、小习
 
-<one tweet, neutral voice: what this round changed. Not what it discussed — what changed.>
+<one tweet: what this round changed. Not what it discussed, not who said it — what changed.>
 
 📄 [逐字对话记录](https://github.com/OWNER/REPO/blob/<SHA>/discussions/<slug>/2026-08-20-1643.md) · 20.6KB · 24 轮 · 仅剔除机器内脏
 ```
@@ -384,6 +396,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
+- **Conclusions, not proceedings.** The body answers where this stands, what is open, what is concluded, what needs the reader. Who proposed what to whom is process; it lives in the transcript. Names appear in `Disagreement` only.
 - **Three artefacts, three jobs.** Top post = current picture. Comment = what this round changed. Transcript = what was actually said. No restating across them.
 - **Online is the only source of truth for the thread.** Read before every write; never cache it. The transcript is the exception — it is immutable evidence, and git is the right home for that.
 
