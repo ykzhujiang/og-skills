@@ -248,7 +248,37 @@ Nothing is *lost* to the fold: `<details>` is a display default, not a deletion.
 
 **The body holds conclusions and disagreements. It does not narrate the discussion.**
 
-A reader arriving cold needs four answers: where does this stand, what is still open, what has been concluded, and what needs them. None of those require knowing who proposed what to whom, in which order, and who conceded. That is the process, and the process belongs in the transcript.
+A reader scanning the post should learn five things without clicking anything:
+
+1. what this is about
+2. what the current thinking is
+3. what problems it has hit
+4. what is being asked of them
+5. roughly what the positions are
+
+None of those require knowing who proposed what to whom, in which order, and who conceded. That is the process, and the process belongs in the transcript.
+
+### Every section compresses itself
+
+**Do not decide which sections are visible and which are hidden. Every section is both.** Each one gets a `<summary>` line carrying its *content* in compressed form, with the full list inside the fold.
+
+```markdown
+▸ 已达成共识（7）：AI 是助手、主体是人；帖子只记结论不记过程；不禁止人工手改
+▸ 还没想清楚（4）：AI 独立身份、内部思考是否留档 —— 均尚未讨论，无人被卡
+▸ 分歧（1）：小习认为 AI 自己写概括可能偏向自己，故逐字对话必须同时存在
+```
+
+**A `<summary>` is not a label.** `已达成共识（7）` alone tells a reader nothing and forces a click to learn anything; the version above answers the question in one line and the click becomes optional.
+
+Two earlier attempts got this wrong in opposite directions and both were rejected by the user on a live thread:
+
+| attempt | visible chars | why it failed |
+|---|---|---|
+| narrate the discussion in the body | 505 | process nobody asked for |
+| show only status, fold all substance | 348 | *"reads like a spec sheet — no idea what this is even about"* |
+| **one compressed line per section** | **467** | — |
+
+Note that the winning version is **not the shortest**. Length was never the problem; **spending the visible lines on the wrong things** was. Folding the conclusions saved characters and destroyed the point of the post.
 
 State each conclusion **impersonally, with its reason, and stop**:
 
@@ -263,6 +293,26 @@ State each conclusion **impersonally, with its reason, and stop**:
 Both carry the same conclusion and the same reason. The second adds a negotiation the reader did not ask for. Measured on a real thread, stripping the narration cut `Settled` by **38%** with no loss of content.
 
 **This supersedes an earlier instruction to write the body as an outside observer of the discussion.** That instruction was introduced to fix attribution, and it does — but describing an exchange *is* narrating process, so it produced exactly the bloat this section now forbids. The two goals are reconciled below.
+
+### Section labels follow the discussion's language
+
+Label sections in whatever language the discussion happens in — a reader who has to translate the headings is being taxed for nothing. For a Chinese-language discussion:
+
+| | |
+|---|---|
+| what this is about | **讨论什么** |
+| current thinking | **当前想法** |
+| concluded | **已达成共识** |
+| not yet worked out | **还没想清楚** |
+| disagreement | **分歧** |
+| ruled out | **已排除的做法** |
+| verified facts | **已验证的事实** |
+| `not yet discussed` | 尚未讨论 |
+| `blocked on: X` | 等 X |
+| `deferred: reason` | 暂缓（原因） |
+| `**S1** · date · names` | **第 1 次讨论 · date · names** |
+
+**There is no "what the reader must do" section.** It reads as presumptuous — the author often does not know whether help is needed. Anything needing someone else is an item under **还没想清楚**, marked `等 X`, and a reader can raise their own hand.
 
 ### Where attribution goes instead
 
@@ -304,40 +354,44 @@ slug: multi-party-approval
 
 # [multi-party-approval] 多人批准与推翻规则
 
-> 📝 本帖由小习（AI）代写。只记结论与分歧，过程见逐字对话链接。
+> 📝 本帖由小习（AI）代写。只记结论与分歧，过程见逐字对话。
 
-**Now:** <one tweet: what has been reached, and whether it is usable. Not how it got there.>
-**Needs you:** <the single thing waiting on this reader — or `nothing`.>
+**讨论什么：** <one line: the question this thread exists to answer.>
 
-## Still open
-
-1. <Question> — not yet discussed
-2. <Question> — blocked on: <person>
-3. <Question> — deferred: <why>
+**当前想法：** <one line: what has been reached, and whether it is usable. Not how it got there.>
 
 <details>
-<summary><b>Settled</b> — 6</summary>
+<summary><b>还没想清楚（4）</b>：<the open questions, compressed, plus whether anyone is blocked></summary>
+
+1. <Question> — 尚未讨论
+2. <Question> — 等 <person>
+3. <Question> — 暂缓（<why>）
+
+</details>
+
+<details>
+<summary><b>已达成共识（7）</b>：<the conclusions themselves, compressed to one line></summary>
 
 1. <Conclusion> — because <reason>.
 
 </details>
 
 <details>
-<summary><b>Ruled out</b> — 4</summary>
+<summary><b>已排除的做法（6）</b>：<what was rejected, one line></summary>
 
 1. <Option> — rejected because <reason>.
 
 </details>
 
 <details>
-<summary><b>Verified facts</b> — 8</summary>
+<summary><b>已验证的事实（10）</b>：<the findings that affect use, one line></summary>
 
 1. <What was measured, and the number.> — measured <when/how>.
 
 </details>
 
 <details>
-<summary><b>Disagreement</b> — 朱江 dissents on Settled 5</summary>
+<summary><b>分歧（1）</b>：<who holds what position, one line></summary>
 
 **朱江:** <their position, their words, untouched.>
 
@@ -396,6 +450,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
+- **Every section compresses itself.** A `<summary>` carries content, never just a label and a count. Deciding that some sections are visible and others hidden is the error; all of them are both.
 - **Conclusions, not proceedings.** The body answers where this stands, what is open, what is concluded, what needs the reader. Who proposed what to whom is process; it lives in the transcript. Names appear in `Disagreement` only.
 - **Three artefacts, three jobs.** Top post = current picture. Comment = what this round changed. Transcript = what was actually said. No restating across them.
 - **Online is the only source of truth for the thread.** Read before every write; never cache it. The transcript is the exception — it is immutable evidence, and git is the right home for that.
