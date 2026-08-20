@@ -41,15 +41,37 @@ The nearest opencode equivalent is a permission rule in `opencode.json`:
 
 </details>
 
-## Per-repo setup
+## Where threads go
 
-The target repo needs **GitHub Discussions turned on** (Settings → General → Features), or via API:
+Discussions collect in a **home repo**, not in whichever repo you happen to be working in — thinking crosses repos and usually predates them ([ADR](./.agents/adr/0005-a-home-repo-for-discussions.md)). Resolution order, first hit wins:
+
+1. a repo you name in conversation
+2. `repo:` in `docs/agents/discussion-config.md`
+3. the built-in default
+
+**Change the default on first use.** The shipped value is the author's private repo, so until you set your own you will get a permissions error. Either name a repo in conversation, or put one line in `docs/agents/discussion-config.md`:
+
+```markdown
+repo: your-org/your-repo
+```
+
+That repo needs **Discussions turned on** — Settings → General → Features, or:
 
 ```bash
 gh api -X PATCH repos/OWNER/REPO -F has_discussions=true
 ```
 
-`to-discussion` writes `docs/agents/discussion-config.md` on its first run — it looks the category up, asks you to confirm, then remembers. Nothing to fill in by hand.
+Everything else is worked out on the first run and remembered. Every run tells you which repo it wrote to, in one line.
+
+## What a thread looks like to read
+
+A human reads roughly **a third** of a thread by default, and loses access to none of it.
+
+The unfolded part is `Now` (where this stands), `Needs you` (whether it is your turn), and `Still open`. `Settled`, `Ruled out`, and `Disagreement` sit in `<details>` — one click away, always read in full by the agent. Headlines are capped at **one tweet, 280 characters**.
+
+The split exploits the fact that agents read raw markdown while humans read rendered HTML, so there is no duplication and no second source of truth. Measured on a live thread: 358 characters visible, 807 folded. Reasoning in [ADR 0004](./.agents/adr/0004-split-what-humans-read-from-what-agents-read.md).
+
+`Disagreement` folds, but its summary line names **who** dissents and **what from**. Compressing the objection itself is the one compression the skill forbids.
 
 ## The skills
 

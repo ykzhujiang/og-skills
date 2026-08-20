@@ -12,6 +12,14 @@ _Avoid_: meeting notes, log, thread (use "thread" only for the GitHub object its
 The stable identifier for a **Discussion**, carried as a `[slug]` prefix in the thread title. How a later session finds the thread again. Matched by exact prefix, never by fuzzy title similarity.
 _Avoid_: id, key, tag
 
+**Home repo**:
+The repo discussions collect in by default, regardless of which repo the agent is working in. Beats the working repo because thinking crosses repos and often predates them. Overridden by `repo:` in config or by the user naming one.
+_Avoid_: default repo, central repo, target repo
+
+**Headline**:
+The unfolded, human-facing part of a **Top post** or **Session comment** — capped at one tweet (280 characters). The only part a human reads by default. Everything else is folded into `<details>`, present but collapsed.
+_Avoid_: summary, TL;DR, abstract
+
 **Top post**:
 The first post of the thread. Holds **current state only** and is rewritten every session. Never a history.
 _Avoid_: body, description, summary
@@ -22,6 +30,10 @@ _Avoid_: update, entry, log line
 
 **Session**:
 One run of the skill against one **Discussion**. Creation counts as session 1.
+
+**Fold**:
+A `<details>` block. Detail a human can reach in one click and an agent always reads in full. A fold is a display default, never a deletion — nothing is dropped to make the headline fit.
+_Avoid_: collapse, hide, truncate
 
 **agent-state**:
 An HTML-comment block at the top of the **Top post** holding machine-readable state (slug, session count, participants, counts). Rebuildable from observable signals if a human deletes it — never load-bearing.

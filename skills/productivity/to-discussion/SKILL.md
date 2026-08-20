@@ -19,10 +19,25 @@ Config is local (it is configuration, not state). Read `docs/agents/discussion-c
 
 ```markdown
 # Discussion config
+repo: ykzhujiang/opengrove-discuss-test
 category_id: DIC_xxx
 category_name: Ideas
 slug_prefix_format: "[<slug>]"
 ```
+
+### Which repo the thread goes in
+
+Resolve `repo` in this order, and **stop at the first hit**:
+
+1. A repo the user named in this conversation.
+2. `repo:` in the config file.
+3. The **home repo** default: `ykzhujiang/opengrove-discuss-test`.
+
+The home repo wins over the repo you happen to be working in. That is deliberate: thinking crosses repos and often predates any of them, so discussions collect in one place instead of scattering across every checkout that happened to be open at the time. A thread about which database to use should not be stranded in whichever service repo the conversation started in.
+
+**Say which repo you used, in one line, every run.** A default that writes somewhere the user did not expect, silently, is worse than asking. One line — `→ ykzhujiang/opengrove-discuss-test #12` — is enough; do not turn it into a question.
+
+> **Other people installing this skill:** the home repo above is the author's and is private to them. Change the `repo:` line in your config, or name your own repo in conversation, on first use. Until you do, runs will fail on permissions.
 
 To fill it, resolve the repo and its categories in one call:
 
@@ -77,7 +92,9 @@ If the topic looks like an existing thread under a *different* slug, show the us
 
 **The GitHub author field is unreliable** — a shared bot token makes every thread look like one person. So every session comment must name its real participants.
 
-Ask once per session, in one exchange: who took part. Record as a `**Participants:**` line. **A session comment without it is invalid** — ask rather than guess, and never infer names from git config.
+Ask once per session, in one exchange: who took part. Record them in the session comment header — `**S3** · 2026-08-20 · 朱江、小习`. **A session comment without names is invalid** — ask rather than guess, and never infer names from git config.
+
+Names sit in the header rather than folded away because "who was in the room" is what a reader checks first when deciding whether a session concerns them.
 
 ## Step 4 — Write
 
@@ -157,6 +174,22 @@ Always pass bodies with `-F name=@file`. Never inline a multi-line body into a q
 
 Current state comes from the top post; the path it took comes from the comments. Never restate comment history in the top post.
 
+## Who reads what
+
+A thread is read by two audiences with opposite needs. A human scanning it wants to know in seconds whether it concerns them. You want everything. Writing one document that serves both produces a wall of text the human stops opening — at which point the thread has failed, however complete it is.
+
+Split it across **three tiers**, exploiting the fact that you read raw markdown and the human reads rendered HTML:
+
+| tier | written as | human sees | you see |
+|---|---|---|---|
+| **Headline** | plain text at the top | yes — this is all they read by default | yes |
+| **Detail** | `<details>` block | collapsed; one click if they want it | yes, always |
+| **Machine state** | `<!-- ... -->` | nothing | yes |
+
+**Every headline is one tweet: 280 characters, hard limit.** Not a paragraph trimmed — one sentence that survives on its own. If it will not fit, the thing you are trying to say is two things.
+
+Nothing is *lost* to the fold: `<details>` is a display default, not a deletion. Everything you would have written still gets written, one tier down.
+
 ## Top post format
 
 ```markdown
@@ -174,50 +207,50 @@ promoted_decisions: []
 
 # [multi-party-approval] 多人批准与推翻规则
 
-## Where this stands
-
-Two or three sentences readable cold: what this is, and why it matters now.
-
-## Settled
-
-1. <Conclusion> — because <reason>.
+**Now:** <one tweet: where this stands and why it matters now.>
+**Needs you:** <the single thing waiting on this reader — or `nothing`.>
 
 ## Still open
-
-Each item carries **which kind of open it is** — these three are never interchangeable:
 
 1. <Question> — not yet discussed
 2. <Question> — blocked on: <person>
 3. <Question> — deferred: <why>
 
-## Ruled out
+<details>
+<summary><b>Settled</b> — 6</summary>
 
-What was considered and rejected, with the reason. This is what stops the same proposal returning.
+1. <Conclusion> — because <reason>.
 
-## Disagreement
+</details>
 
-Only when it exists. Each position **in the words of whoever holds it**, attributed by name. Do not synthesise into a middle ground and do not resolve it here.
+<details>
+<summary><b>Ruled out</b> — 4</summary>
+
+1. <Option> — rejected because <reason>.
+
+</details>
+
+<details>
+<summary><b>Disagreement</b> — 朱江 dissents on Settled 5</summary>
+
+**朱江:** <their position, their words, untouched.>
+
+</details>
 ```
 
-**If the `agent-state` block is missing or unparseable** (a human editing the post on the web may delete it), rebuild it from the body and the thread metadata, then say so in your report. Never fail the run over it. Derive each field from an observable signal:
+`Now` and `Needs you` are the whole human-facing contract: where it stands, and whether it is their turn. **`Still open` stays unfolded** — it is short, and it is the only section that asks anything of anybody. `Settled` and `Ruled out` fold: they only grow, and they are lookup material, consulted rather than read.
 
-| field | rebuild from |
-|---|---|
-| `slug` | the `[...]` prefix of the title |
-| `sessions` | number of comments matching `## Session <N>` |
-| `last_session` | date of the newest session comment |
-| `participants_all` | union of every `**Participants:**` line across comments |
-| `open_questions` | number of items under `## Still open` |
-| `status` | `promoted_decisions` empty and open items remain ⇒ `exploring` |
-
-**This is why session 1 must also post a session comment** (Step 4a runs on creation too, not just on later sessions). If creation writes only the top post, the invariant *one session = one comment* breaks, and a rebuild counts `sessions` one too low with no way to detect the error — the state silently disagrees with reality. Keep the invariant exact and the rebuild needs no correction factor.
+**`Disagreement` folds, but its `<summary>` must name who dissents and what they dissent from.** That line is a pointer, **not a summary of their argument** — a human must be able to see that dissent exists without opening it, and must get the position itself verbatim when they do. Compressing someone's objection into the summary line is the one compression that is forbidden here.
 
 ## Session comment format
 
 ```markdown
-## Session <N> — <date>
+**S3** · 2026-08-20 · 朱江、小习
 
-**Participants:** <real names>          ← required
+<one tweet: what this round changed. Not what it discussed — what changed.>
+
+<details>
+<summary>detail</summary>
 
 **Covered:** what this round went after.
 
@@ -225,8 +258,27 @@ Only when it exists. Each position **in the words of whoever holds it**, attribu
 
 **Opened this session:** questions this round surfaced.
 
-**Unresolved:** asked and dodged, or ran out of time.
+**Unresolved:** what was tried and left open.
+
+</details>
 ```
+
+Two visible lines per session. A human scrolling the thread reads the stream of tweets and gets the shape of how the thinking moved; they open a session only when one of them matters to them.
+
+The tweet reports **change, not activity**. "Discussed the permission model" tells a reader nothing. "Went single-owner; dissent stays on record. Now stuck on whether an owner can be overruled." tells them where things went and what is live.
+
+**If the `agent-state` block is missing or unparseable** (a human editing the post on the web may delete it), rebuild it from the body and the thread metadata, then say so in your report. Never fail the run over it. Derive each field from an observable signal:
+
+| field | rebuild from |
+|---|---|
+| `slug` | the `[...]` prefix of the title |
+| `sessions` | number of comments whose first line matches `**S<N>** ·` |
+| `last_session` | date of the newest session comment |
+| `participants_all` | union of the names in every `**S<N>** · <date> · <names>` header |
+| `open_questions` | number of items under `## Still open` |
+| `status` | `promoted_decisions` empty and open items remain ⇒ `exploring` |
+
+**This is why session 1 must also post a session comment** (Step 4a runs on creation too, not just on later sessions). If creation writes only the top post, the invariant *one session = one comment* breaks, and a rebuild counts `sessions` one too low with no way to detect the error — the state silently disagrees with reality. Keep the invariant exact and the rebuild needs no correction factor.
 
 ## Rules
 
