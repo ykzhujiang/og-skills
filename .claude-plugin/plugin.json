@@ -1,0 +1,18 @@
+{
+  "name": "og-skills",
+  "version": "0.1.0",
+  "description": "OpenGrove agent skills for carrying intent between people, sessions, and agents — grill an idea into shape, then park it in GitHub Discussions.",
+  "author": {
+    "name": "朱江 (Zhu Jiang)",
+    "url": "https://github.com/ykzhujiang"
+  },
+  "homepage": "https://github.com/ykzhujiang/og-skills",
+  "repository": "https://github.com/ykzhujiang/og-skills",
+  "license": "MIT",
+  "keywords": ["discussion", "intent", "github-discussions", "grilling", "decision-records"],
+  "skills": [
+    "./skills/productivity/discuss",
+    "./skills/productivity/to-discussion",
+    "./skills/vendor/grilling"
+  ]
+}

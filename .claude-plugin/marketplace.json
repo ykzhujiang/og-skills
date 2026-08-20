@@ -1,0 +1,17 @@
+{
+  "name": "ykzhujiang",
+  "owner": {
+    "name": "朱江 (Zhu Jiang)",
+    "url": "https://github.com/ykzhujiang"
+  },
+  "description": "OpenGrove skills, as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "og-skills",
+      "source": "./",
+      "description": "Grill a fuzzy idea into shape, then publish it to GitHub Discussions so a later session or someone else's agent can pick it up.",
+      "category": "productivity",
+      "keywords": ["discussion", "intent", "github-discussions", "grilling"]
+    }
+  ]
+}

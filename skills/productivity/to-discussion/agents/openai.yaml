@@ -1,0 +1,3 @@
+interface:
+  display_name: "To Discussion"
+  short_description: "Publish the current thinking to GitHub Discussions"

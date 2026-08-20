@@ -1,0 +1,5 @@
+interface:
+  display_name: "Discuss"
+  short_description: "Think an idea through, then park it where others can pick it up"
+policy:
+  allow_implicit_invocation: false
