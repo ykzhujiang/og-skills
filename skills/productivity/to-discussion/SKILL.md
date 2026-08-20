@@ -174,7 +174,11 @@ mutation($d:ID!,$body:String!){
 }' -F d=NEW_DISCUSSION_ID -F body=@session1.md
 ```
 
-Creation is a session like any other. Skipping its comment breaks the *one session = one comment* invariant that state rebuild depends on — see the rebuild table below.
+Creation is a session like any other, so a thread **never** exists with zero comments and the first transcript always has a home.
+
+> An earlier version justified this rule by a state-rebuild invariant that counted sessions from comments. That justification is dead — `sessions` was one of the fields removed from `agent-state` for being written and never read. The rule survives on its own merit: **every round needs its own permanent record and its own transcript link.** A rule kept alive by a reason that no longer holds is worse than no rule, because the next reader trusts the reason.
+
+**On a first run the one-liner states what was *established*, not what *changed*.** There is no prior state to differ from, so "what changed" is "everything", which merely restates the top post.
 
 ### Later runs — append, verify, then refresh
 
@@ -257,6 +261,19 @@ A reader scanning the post should learn five things without clicking anything:
 5. roughly what the positions are
 
 None of those require knowing who proposed what to whom, in which order, and who conceded. That is the process, and the process belongs in the transcript.
+
+### The top post must point at the evidence
+
+The byline promises that the process is available. **The top post has to make that promise reachable**, or the claim that the summary is auditable is decoration: a reader who cannot find the transcript cannot check anything, and asking them to scroll the comment stream to discover that evidence exists at all is not a pointer.
+
+Two entry points, deliberately different:
+
+| | points to | why this one |
+|---|---|---|
+| **Top post** | the topic **folder** | always current, maintained by git, cannot drift |
+| **Session comment** | one file, pinned to a **commit SHA** | exactly the state published with that round, immutable |
+
+The top post links a folder rather than listing files because a hand-maintained list is a second index that will disagree with the directory. Git already keeps that listing correct for free.
 
 ### Every section compresses itself
 
@@ -354,7 +371,8 @@ slug: multi-party-approval
 
 # [multi-party-approval] 多人批准与推翻规则
 
-> 📝 本帖由小习（AI）代写。只记结论与分歧，过程见逐字对话。
+> 📝 本帖由小习（AI）代写。只记结论与分歧，讨论过程见下方逐字对话。
+> 📄 逐字对话：[discussions/<slug>/](https://github.com/OWNER/REPO/tree/main/discussions/<slug>) — 共 N 份，每次讨论各一份，精确到某一轮的链接见对应评论。
 
 **讨论什么：** <one line: the question this thread exists to answer.>
 
@@ -450,6 +468,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
+- **The top post links the transcript folder.** The byline claims the process is available; a claim the reader cannot act on is decoration.
 - **Every section compresses itself.** A `<summary>` carries content, never just a label and a count. Deciding that some sections are visible and others hidden is the error; all of them are both.
 - **Conclusions, not proceedings.** The body answers where this stands, what is open, what is concluded, what needs the reader. Who proposed what to whom is process; it lives in the transcript. Names appear in `Disagreement` only.
 - **Three artefacts, three jobs.** Top post = current picture. Comment = what this round changed. Transcript = what was actually said. No restating across them.
