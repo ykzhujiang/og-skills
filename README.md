@@ -9,10 +9,12 @@ A conversation where you figured something out is worth more than the code it pr
 ## Install
 
 ```bash
-npx skills@latest add ykzhujiang/og-skills
+npx skills@latest add ykzhujiang/og-skills --skill '*'
 ```
 
-Take **all three** skills when the installer asks. `discuss` calls the other two; picking it alone gets you a skill that fails quietly.
+`--skill '*'` takes **all three**, which is what you want: `discuss` calls the other two, and picking it alone gets you a skill that fails quietly. Drop the flag to choose interactively. Add `-g` for a global install instead of per-project.
+
+Verified: the installer discovers all three skills from this layout.
 
 <details>
 <summary><strong>Claude Code plugin</strong></summary>

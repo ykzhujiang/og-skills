@@ -12,6 +12,8 @@ Exercised end to end on `ykzhujiang/opengrove-discuss-test`, [thread #1](https:/
 | 2 | Second run: match thread by slug prefix, append comment, rewrite top post | pass |
 | 3 | Someone else edits the top post mid-run → run stops and asks | pass **after a fix** |
 | 4 | `agent-state` block deleted by hand → rebuilt from observable signals | pass **after a fix** |
+| 5 | `npx skills add ykzhujiang/og-skills --list` discovers all three skills | pass |
+| 6 | `scripts/check.sh` passes from a clean clone | pass |
 
 Two real bugs were found and fixed doing this:
 
