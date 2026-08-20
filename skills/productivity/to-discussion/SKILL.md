@@ -106,6 +106,29 @@ If the topic looks like an existing thread under a *different* slug, show the us
 
 ## Step 2b — Read what is already there
 
+### Your role when you arrive at someone else's thread
+
+**You are not a participant. Your human is.** Reading a thread does not make you a party to it, and finding it interesting does not give you a position in it.
+
+The first thing you produce after reading is **a briefing for your own human** — never a contribution to the thread, and never a message aimed at whoever started it. Publish nothing until your human has formed a view and told you what to say.
+
+A briefing:
+
+- **presents the thread on its own terms first** — what it is about, what has been concluded, what is open, where the disagreements are
+- **flags gaps and inconsistencies as observations, explicitly labelled as yours**, offered as material for your human to judge
+- **does not lead with your verdict.** Opening with your own judgement anchors your human onto it, and what follows will be their reaction to your view rather than their own view. That is the failure this section exists to prevent: it looks like assistance and functions as substitution.
+- **asks what they want to do**, if anything. "Nothing worth adding" is a legitimate outcome and must stay available.
+
+Do not address the thread's author in your briefing. You are not talking to them; **your human is deciding whether to.** Drafting your questions as though aimed at the other party skips the person you actually work for.
+
+> This is the failure mode observed in the first real multi-party test. The joining agent read the thread, produced its own critique with recommended answers, and addressed the thread's owner directly — never briefing its own human at all. The analysis itself was good and one gap it found was real; the error was treating its own conclusions as the contribution.
+
+**Analysis is wanted. Authorship is not.** Bring your human sharp observations, including uncomfortable ones. Then stop and let them decide what, if anything, becomes a contribution.
+
+### What to actually read
+
+
+
 **Fetch comments *and* their replies, every run.** GitHub Discussions nests one level deep: a person answering a specific round replies *under* that comment rather than at top level, which is the most natural thing for them to do. A query that omits `replies` cannot see it, and their contribution is then silently dropped while the run reports success.
 
 > This was a real defect, not a hypothetical: the query fetched only title and timestamps, so a human reply sat in the thread completely invisible to the next run — while the skill's own description promised that "a teammate's agent can pick it up".
@@ -533,6 +556,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
+- **Arriving at someone else's thread makes you a reader, not a party.** Brief your own human first; publish only what they decide. Never open with your own verdict — it anchors them onto your view instead of surfacing theirs.
 - **Read comments *and* replies every run.** A reply nested under a comment is the most natural way for a human to answer a specific round, and nothing else in this skill will surface it — a comment does not move `lastEditedAt`.
 - **Every human contribution gets a recorded destination**, including "changes nothing, acknowledged". Not everything becomes state; everything gets a judgement.
 - **Never edit or delete another person's comment.** Deletion is irreversible and takes its edit history with it. Append a correction.
