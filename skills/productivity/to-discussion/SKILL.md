@@ -85,17 +85,15 @@ gh api graphql -f query='
 query($owner:String!,$name:String!,$cat:ID!){
   repository(owner:$owner,name:$name){
     discussions(first:100,categoryId:$cat,orderBy:{field:UPDATED_AT,direction:DESC}){
-      nodes{
-        id number title url updatedAt lastEditedAt body
-        comments(first:100){ nodes{
-          id author{login} createdAt body
-          replies(first:50){ nodes{ id author{login} createdAt body } }
-        }}
-      }
+      nodes{ id number title url updatedAt lastEditedAt body }
     }
   }
 }' -F owner=OWNER -F name=NAME -F cat=CATEGORY_ID
 ```
+
+**Do not fetch comments in this query.** GitHub caps a query at 500,000 possible nodes, and asking for comments and replies across 100 threads blows past it — `100 × 100 × 50` plus overhead is **510,100 nodes**, and the whole query is rejected with `MAX_NODE_LIMIT_EXCEEDED`. Finding a thread and reading it are two queries: this one scans titles across the category, then Step 2b reads the one thread you matched.
+
+> This was a real defect in an earlier version of this file, found only when another agent tried to run it. The query was not merely slow — it returned nothing at all. Node cost is multiplicative down the nesting, so any `first:` you add deep in a list query multiplies everything above it.
 
 Match `[<slug>]` as a literal prefix — **do not** fall back to fuzzy matching on wording. Two outcomes only:
 
@@ -123,9 +121,44 @@ Do not address the thread's author in your briefing. You are not talking to them
 
 > This is the failure mode observed in the first real multi-party test. The joining agent read the thread, produced its own critique with recommended answers, and addressed the thread's owner directly — never briefing its own human at all. The analysis itself was good and one gap it found was real; the error was treating its own conclusions as the contribution.
 
+### Keep the briefing short
+
+The briefing obeys the same discipline as the post: **your human should be able to scan it, and reach for detail only where they want it.** A briefing they have to work through is a second reading burden, which defeats the point of having read the thread for them.
+
+Target **five short blocks**, and open with the thread link so they can look for themselves at any moment:
+
+```markdown
+📄 <thread url>
+
+**在讲什么：** <one line>
+**目前状态：** <one line: what is concluded, what is open, in numbers if useful>
+**我核对过的：** <one line — say plainly whether you read the transcripts or only the summary>
+**我的观察（我的判断，不是帖子的结论）：** <up to three bullets, one line each>
+**要你定的：** <the choice, including "不值得加">
+```
+
+Put detail in a `<details>` fold if you genuinely have more, or simply offer it: *"哪条要展开我再讲"*. Do not pre-emptively expand every observation — your human will ask about the one they care about, and that is cheaper than making them read all of them.
+
+**Say whether you actually read the transcripts.** It is the one claim in your briefing your human cannot check without redoing your work, and the whole approach rests on someone doing that check.
+
 **Analysis is wanted. Authorship is not.** Bring your human sharp observations, including uncomfortable ones. Then stop and let them decide what, if anything, becomes a contribution.
 
 ### What to actually read
+
+Read the **one** thread you matched, by id — comments and their replies together:
+
+```bash
+gh api graphql -f query='
+query($id:ID!){ node(id:$id){ ... on Discussion {
+  title body lastEditedAt
+  comments(first:100){ totalCount nodes{
+    id author{login} createdAt body
+    replies(first:50){ nodes{ id author{login} createdAt body } }
+  }}
+}}}' -F id=DISCUSSION_ID
+```
+
+One thread costs `100 × 50 = 5,000` nodes and runs comfortably. Both `node(id:)` and `repository{discussion(number:)}` return identical results here — verified, both give the same `totalCount` and the same nodes.
 
 
 
@@ -556,6 +589,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
+- **A briefing is scannable and opens with the thread link.** Five short blocks, at most three observations, detail on request. A briefing your human must work through is a second reading burden and defeats having read the thread for them.
 - **Arriving at someone else's thread makes you a reader, not a party.** Brief your own human first; publish only what they decide. Never open with your own verdict — it anchors them onto your view instead of surfacing theirs.
 - **Read comments *and* replies every run.** A reply nested under a comment is the most natural way for a human to answer a specific round, and nothing else in this skill will surface it — a comment does not move `lastEditedAt`.
 - **Every human contribution gets a recorded destination**, including "changes nothing, acknowledged". Not everything becomes state; everything gets a judgement.
