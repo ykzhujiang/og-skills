@@ -75,7 +75,13 @@ gh api graphql -f query='
 query($owner:String!,$name:String!,$cat:ID!){
   repository(owner:$owner,name:$name){
     discussions(first:100,categoryId:$cat,orderBy:{field:UPDATED_AT,direction:DESC}){
-      nodes{ id number title url updatedAt lastEditedAt }
+      nodes{
+        id number title url updatedAt lastEditedAt body
+        comments(first:100){ nodes{
+          id author{login} createdAt body
+          replies(first:50){ nodes{ id author{login} createdAt body } }
+        }}
+      }
     }
   }
 }' -F owner=OWNER -F name=NAME -F cat=CATEGORY_ID
@@ -87,6 +93,47 @@ Match `[<slug>]` as a literal prefix — **do not** fall back to fuzzy matching 
 - **No hit** → new topic. Confirm the slug, then create.
 
 If the topic looks like an existing thread under a *different* slug, show the user both and let them decide. Never merge threads on your own judgement.
+
+## Step 2b — Read what is already there
+
+**Fetch comments *and* their replies, every run.** GitHub Discussions nests one level deep: a person answering a specific round replies *under* that comment rather than at top level, which is the most natural thing for them to do. A query that omits `replies` cannot see it, and their contribution is then silently dropped while the run reports success.
+
+> This was a real defect, not a hypothetical: the query fetched only title and timestamps, so a human reply sat in the thread completely invisible to the next run — while the skill's own description promised that "a teammate's agent can pick it up".
+
+Also note that a comment **does not move `lastEditedAt`**, so the concurrency guard in Step 6b will not notice it either. Reading here is the *only* thing that surfaces human contributions. There is no second line of defence.
+
+### Telling contributions apart
+
+| | how to recognise | treat as |
+|---|---|---|
+| AI-written | carries the `📝 …代写` byline | already reflected in the top post |
+| **human-written** | **no byline** | **new input that must be handled** |
+
+### Every human contribution gets a destination
+
+Read each one and put it somewhere. **Silently leaving it out is the failure this step exists to prevent.**
+
+| what it does | where it goes |
+|---|---|
+| overturns or corrects a conclusion | amend **已达成共识** |
+| raises a new question | add to **还没想清楚** |
+| objects to a conclusion | **分歧**, in their own words, attributed |
+| reports a measurement | **已验证的事实** |
+| comments without changing anything | **nowhere in the top post** — acknowledge it in your next session one-liner |
+
+That last row is the one people get wrong. A remark like *"this length reads well"* changes no conclusion and must not be forced into the state; padding the top post with it destroys the compression. **What is required is that every contribution receives a recorded judgement — not that everything becomes state.**
+
+### Joining a thread you did not start
+
+You may update the top post. You must not flatten the people already in it.
+
+- **Never edit or delete anyone else's comment.** Deleting is irreversible — the node returns `NOT_FOUND` and its edit history dies with it. Append a correction instead.
+- **Never remove someone's open question or dissent** because you disagree with it. Answer it in your own comment; if it is resolved, say by whom and why.
+- **Preserve dissent verbatim.** You are not the arbiter of a disagreement you have just walked into.
+- **Read the transcripts before contributing.** The top post is a compression written by another AI about its own conversation; the verbatim record is what lets you check whether that compression is fair. Reading only the summary means inheriting someone else's editorial choices unexamined.
+- **Add your own transcript** as a new file in the same topic folder. Do not touch theirs.
+
+**If you lack push access to the repo**, put your transcript in a fenced block inside your comment — a comment body holds 70,000 characters, verified. Say in the comment that it is inline for lack of write access, so whoever has access can move it into the folder later.
 
 ## Step 3 — Participants (required)
 
@@ -476,6 +523,9 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
+- **Read comments *and* replies every run.** A reply nested under a comment is the most natural way for a human to answer a specific round, and nothing else in this skill will surface it — a comment does not move `lastEditedAt`.
+- **Every human contribution gets a recorded destination**, including "changes nothing, acknowledged". Not everything becomes state; everything gets a judgement.
+- **Never edit or delete another person's comment.** Deletion is irreversible and takes its edit history with it. Append a correction.
 - **The top post links the transcript folder.** The byline claims the process is available; a claim the reader cannot act on is decoration.
 - **Every section compresses itself.** A `<summary>` carries content, never just a label and a count. Deciding that some sections are visible and others hidden is the error; all of them are both.
 - **Conclusions, not proceedings.** The body answers where this stands, what is open, what is concluded, what needs the reader. Who proposed what to whom is process; it lives in the transcript. Names appear in `Disagreement` only.
