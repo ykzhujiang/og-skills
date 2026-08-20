@@ -121,25 +121,29 @@ Do not address the thread's author in your briefing. You are not talking to them
 
 > This is the failure mode observed in the first real multi-party test. The joining agent read the thread, produced its own critique with recommended answers, and addressed the thread's owner directly — never briefing its own human at all. The analysis itself was good and one gap it found was real; the error was treating its own conclusions as the contribution.
 
-### Keep the briefing short
+### The briefing: four lines, no opinions
 
-The briefing obeys the same discipline as the post: **your human should be able to scan it, and reach for detail only where they want it.** A briefing they have to work through is a second reading burden, which defeats the point of having read the thread for them.
-
-Target **five short blocks**, and open with the thread link so they can look for themselves at any moment:
+**Goal: your human understands the thread without opening it.** Everything else is a click away, and a briefing they have to work through defeats having read it for them.
 
 ```markdown
-📄 <thread url>
+📄 <thread url>（逐字对话已读 119KB）
 
 **在讲什么：** <one line>
-**目前状态：** <one line: what is concluded, what is open, in numbers if useful>
-**我核对过的：** <one line — say plainly whether you read the transcripts or only the summary>
-**我的观察（我的判断，不是帖子的结论）：** <up to three bullets, one line each>
-**要你定的：** <the choice, including "不值得加">
+**目前结论：** <one line — the latest state, not a history>
+**还没定的：** <one line — the open questions, compressed>
 ```
 
-Put detail in a `<details>` fold if you genuinely have more, or simply offer it: *"哪条要展开我再讲"*. Do not pre-emptively expand every observation — your human will ask about the one they care about, and that is cheaper than making them read all of them.
+Then one closing line: ask what they want to do, or — if the thread marks an item `等 <their name>` — say so plainly, because that is the one thing addressed to them personally.
 
-**Say whether you actually read the transcripts.** It is the one claim in your briefing your human cannot check without redoing your work, and the whole approach rests on someone doing that check.
+**Hold your observations back.** Do not put your analysis, gaps you spotted, or recommended answers in the briefing. Reasons:
+
+- It doubles the length, and length is what stops the briefing being read.
+- **It anchors your human onto your framing** before they have their own. What follows is then their reaction to you, not their view.
+- Most briefings need no action. Loading every one with critique spends your human's attention on threads they were going to skip.
+
+Keep them ready. Offer them in one short line — *"我有几条观察，要听吗"* — and deliver only if asked. **Being asked is the signal that they are wanted.**
+
+The read-the-transcripts claim stays, compressed to a parenthetical on the link line. It is the one thing your human cannot check without redoing your work, and the approach depends on someone doing that check — but it does not need a paragraph.
 
 **Analysis is wanted. Authorship is not.** Bring your human sharp observations, including uncomfortable ones. Then stop and let them decide what, if anything, becomes a contribution.
 
@@ -589,7 +593,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
-- **A briefing is scannable and opens with the thread link.** Five short blocks, at most three observations, detail on request. A briefing your human must work through is a second reading burden and defeats having read the thread for them.
+- **A briefing is four lines and carries no opinions.** Link, 在讲什么, 目前结论, 还没定的 — enough to understand the thread without opening it. Hold your observations and offer them in one line; being asked is the signal they are wanted. Leading with analysis anchors your human onto your framing before they have their own.
 - **Arriving at someone else's thread makes you a reader, not a party.** Brief your own human first; publish only what they decide. Never open with your own verdict — it anchors them onto your view instead of surfacing theirs.
 - **Read comments *and* replies every run.** A reply nested under a comment is the most natural way for a human to answer a specific round, and nothing else in this skill will surface it — a comment does not move `lastEditedAt`.
 - **Every human contribution gets a recorded destination**, including "changes nothing, acknowledged". Not everything becomes state; everything gets a judgement.
