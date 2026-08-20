@@ -174,11 +174,17 @@ mutation($d:ID!,$body:String!){
 }' -F d=NEW_DISCUSSION_ID -F body=@session1.md
 ```
 
-Creation is a session like any other, so a thread **never** exists with zero comments and the first transcript always has a home.
+Creation is a session like any other, so a thread **never** exists with zero comments.
 
-> An earlier version justified this rule by a state-rebuild invariant that counted sessions from comments. That justification is dead — `sessions` was one of the fields removed from `agent-state` for being written and never read. The rule survives on its own merit: **every round needs its own permanent record and its own transcript link.** A rule kept alive by a reason that no longer holds is worse than no rule, because the next reader trusts the reason.
+#### Why a first run needs a comment at all
 
-**On a first run the one-liner states what was *established*, not what *changed*.** There is no prior state to differ from, so "what changed" is "everything", which merely restates the top post.
+At creation this comment looks redundant — the top post already says everything the round produced — and that appearance is why the rule keeps getting questioned. The value is not visible on the day it is written.
+
+**The top post is rewritten every run, so it forgets. The comment stream is append-only, so it remembers.** Five rounds later the top post holds only the current picture, and the comment stream holds rounds 2–5. Without a round-1 comment, *what the first round established is recorded nowhere in the thread* — a hole at exactly the beginning. It can in principle be reconstructed by subtracting rounds 2–5 from the current state; in practice nobody will. The transcript survives, but a transcript is raw record, not a summary.
+
+So a first-run comment is **not a restatement, it is an investment** — written for a reader who will arrive after the top post has moved on. Write it for that reader: state what this round **established**, not what it "changed", since there is no prior state to differ from.
+
+> Two earlier justifications for this rule were wrong and are recorded here so they are not revived. The first — that state rebuild counted sessions from comments — died when `sessions` was deleted from `agent-state` for being write-only. The second — "every round needs its own transcript link" — does not survive either, because the top post now links the folder and a first thread has exactly one file in it. Only the forgetting/remembering asymmetry above holds up.
 
 ### Later runs — append, verify, then refresh
 
@@ -274,6 +280,8 @@ Two entry points, deliberately different:
 | **Session comment** | one file, pinned to a **commit SHA** | exactly the state published with that round, immutable |
 
 The top post links a folder rather than listing files because a hand-maintained list is a second index that will disagree with the directory. Git already keeps that listing correct for free.
+
+**Do not state a count.** A number like "3 transcripts" is derived data that must be updated by hand on every run, which is the same defect that got seven fields deleted from `agent-state`. The folder already answers "how many"; a number in the post can only go stale and lie.
 
 ### Every section compresses itself
 
@@ -372,7 +380,7 @@ slug: multi-party-approval
 # [multi-party-approval] 多人批准与推翻规则
 
 > 📝 本帖由小习（AI）代写。只记结论与分歧，讨论过程见下方逐字对话。
-> 📄 逐字对话：[discussions/<slug>/](https://github.com/OWNER/REPO/tree/main/discussions/<slug>) — 共 N 份，每次讨论各一份，精确到某一轮的链接见对应评论。
+> 📄 逐字对话：[discussions/<slug>/](https://github.com/OWNER/REPO/tree/main/discussions/<slug>)（每次讨论各一份；精确到某一轮的链接见对应评论）
 
 **讨论什么：** <one line: the question this thread exists to answer.>
 
