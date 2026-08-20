@@ -13,6 +13,16 @@ Publish the state of the current conversation to the repo's GitHub Discussions, 
 
 Run when the user signals they are done for now: "no further ideas for now", "let's stop here", or an explicit wrap-up. **The signal is theirs.** Do not wait for the frontier to be empty — an unfinished frontier is the normal case and becomes `Still open`.
 
+## Before anything — authentication
+
+Every read in this skill goes through GitHub's GraphQL API, and **GraphQL rejects anonymous requests even for public repositories** (verified: HTTP 403). A public thread you can open in a browser is still unreadable to you without a token.
+
+```bash
+gh auth status || gh auth login
+```
+
+Any account works for reading a public thread, and **commenting on a public repo's Discussions needs no collaborator access**. Pushing a transcript into the repo does — when you lack it, use the inline fallback in Step 2b.
+
 ## Step 1 — Config
 
 Config is local (it is configuration, not state). Read `docs/agents/discussion-config.md`. If absent, create it on this run.
