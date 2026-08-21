@@ -49,6 +49,10 @@ The home repo wins over the repo you happen to be working in. That is deliberate
 
 > **Other people installing this skill:** the home repo above is the author's and is private to them. Change the `repo:` line in your config, or name your own repo in conversation, on first use. Until you do, runs will fail on permissions.
 
+**When a team shares one repo, `repo:` is mandatory, not optional.** Relying on the built-in default is defensible for one person — they notice immediately when a thread lands somewhere odd. It is not defensible for a team: each member's config resolves independently, so the first member who never set `repo:` silently writes their side of a shared discussion into a different repo, and the thread quietly forks. **Write the line even when it matches the default**, so that the value is recorded rather than inherited.
+
+Check it, rather than assuming the file is complete: a config written by an earlier single-user run legitimately has no `repo:` line at all.
+
 To fill it, resolve the repo and its categories in one call:
 
 ```bash
@@ -248,17 +252,37 @@ Grouped by topic because the topic is what a reader navigates to. The session is
 ```markdown
 # Session transcript — <slug>
 
-- **Covers:** `ses_xxx` 2026-08-20T16:43 – 22:19    ← the watermark
+- **Covers:** `ses_xxx` 2026-08-20T16:43:07 – 22:19:52    ← the watermark, to the second
 - **Participants:** 朱江（人类）、小习（AI 助手）
 - **Thread:** #4
 - **Verbatim:** dialogue text only, unedited. Stripped: reasoning 113,952 / tool 93,979 / metadata 13,540 chars.
 ```
 
-`Covers` **is** the watermark, and it lives in the file rather than in `agent-state` so that it travels with the thing it describes and survives anyone editing the thread. For the next increment, find the newest file in this topic folder **for the same session** and resume after its end time. A different session starts fresh.
+`Covers` **is** the watermark, and it lives in the file rather than in `agent-state` so that it travels with the thing it describes and survives anyone editing the thread. For the next increment, find the newest file in this topic folder **for the same session** and resume strictly after the timestamp of its **last recorded turn**. A different session starts fresh.
+
+**Write the watermark to the second, and take the resume point from the record rather than from the header.** Minute precision is not enough: several turns routinely share one minute, so `resume after 23:22` either replays them or drops them, and both failures are silent — a replayed turn looks like the user repeating themselves, a dropped one leaves an argument with no visible origin. Query the store for the newest turn already written, and resume from `time_created >` that exact value.
+
+> Measured, not hypothetical: on the run that produced this paragraph the first increment ended at `23:22:51` and the second was computed from the header's `23:22`, which pulled four already-published turns back in. Caught before the write only because the file's first heading was compared against the previous file's last one. **Compare those two headings every run** — it is the cheapest available check that the increment is actually an increment.
 
 **No index file in the topic folder.** The thread is already the index — every session comment links its own transcript, in order. A second listing would only drift.
 
-## Step 5 — Confirm before landing
+## Step 5 — Closure, then confirm before landing
+
+### 5a. Closure — does the current thinking answer the question the thread exists to answer?
+
+The starting point of a discussion is deliberately ungated ([ADR 0007](../../../.agents/adr/0007-no-gate-on-the-starting-point.md)): an idea may arrive with no problem attached. **This is where that debt is settled instead.**
+
+Before you write anything, put `讨论什么` and `当前想法` side by side and check they are a pair — that the second is recognisably an answer to the first. Three outcomes, and all three are publishable:
+
+- **They pair.** Land it.
+- **They do not pair, and the real question has moved.** Rewrite `讨论什么` to the question the thread is now actually answering, and **say in the session comment that the question was rewritten.** A thread may change its question; it may not change it silently, because a reader who saw the old one will otherwise read the new conclusions as answers to it.
+- **There is no question yet.** Write `讨论什么` as `尚未找到这场讨论要解决的问题` and leave it. **This is an honest state, not a failure** — some discussions exist to find the question, and forcing a plausible one in at this point manufactures exactly the retrofitted problem the ungated start was designed to avoid.
+
+What is forbidden is the fourth outcome: **an unpaired thread published as though paired.** A discussion that wanders is visibly incomplete; one whose conclusions answer a question nobody asked reads as finished, which is why it is the failure worth checking for.
+
+Closure is checked against the whole thread, not this round. An earlier round may have paired it already.
+
+### 5b. Confirm before landing
 
 **Never publish unprompted.** A faithful record is not automatically something the user wants colleagues to read.
 
@@ -269,6 +293,8 @@ Show the user three things and wait:
 3. **Anything you judge sensitive, called out by you.** You cannot know what carries a political cost for them, but you can flag what reads badly: negative metrics, criticism of a named person, an unflattering number, a half-formed opinion they may not want on record.
 
 They answer: go / cut that part / not yet. Point 3 is the one that earns this step — a gate the user has to police themselves is a gate that fails.
+
+**An unanswered flag is not a yes.** If the user replies about something else and leaves a flagged item unaddressed, you have two honest moves: ask once more, or act on the default you already stated **and say plainly, in the same message, that you treated silence as non-objection and that the decision was yours.** Never let a flagged item land silently — a flag raised and then quietly dropped is worse than never raising it, because the user believes it was resolved.
 
 ## Step 6 — Write
 
@@ -595,6 +621,7 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 - **Never invent settlement.** `Settled` holds only what a human explicitly endorsed. Your unanswered recommendation is an open question, not a conclusion.
 - **Do not bundle questions.** Six proposals in one breath collect one "sure" and manufacture consent; that failure is fixed here, at the asking, not later by tagging the record.
 - **Separate what was measured from what was decided.** A verified fact is neither a conclusion nor an open question; give it its own section rather than diluting `Settled`.
+- **A root cause is recorded as a chosen hypothesis, never as a discovered fact.** If the discussion settled on one problem as the root, the `Settled` entry names it, says it is a hypothesis, and says what would show it wrong — and the candidates that were dropped go to `Ruled out` with the reason. Written as a finding it belongs in `Verified facts`, which it is not: nobody measured it, somebody picked it. See [ADR 0008](../../../.agents/adr/0008-no-single-root-problem.md).
 - **Dissent stays in its holder's words.** Do not synthesise a middle ground. The `<summary>` line names who dissents and what from — a pointer, never a précis.
 - **A briefing is four lines.** Link, 在讲什么, 目前结论, 还没定的. No observations, no analysis, no report on your own process. Hold observations and offer them in one line; being asked is the signal they are wanted.
 - **Summarise the whole thread, including comments and replies.** The top post is one AI's compression, refreshed only when that AI last ran; a human contribution lives only in the comments until then. A briefing from the top post alone will confidently report a settled conclusion that a reply beneath it already contests.
@@ -611,3 +638,13 @@ The tweet reports **change, not activity**. "Discussed the permission model" tel
 ## Report back
 
 Print: thread URL, created-or-appended, slug, category, counts of settled and open items, participants recorded, and whether a concurrency conflict or a rebuilt state block was encountered. On a failed precondition, print only what to fix.
+
+**Hand the user three links, every run, creation and append alike:**
+
+1. the **thread**
+2. **this session's comment** — the permalink returned by `addDiscussionComment`, not just the thread
+3. the **transcript**, at its commit SHA
+
+Give the session comment's own permalink because on an established thread the round the user just paid for is somewhere down a long page; a bare thread link makes them hunt for it. On a first run the two coincide, and printing both costs nothing.
+
+**Verify the links resolve before you claim success.** A pushed transcript is not a reachable one — the commit may be local, the branch may not be the default, the path may be wrong. One `curl -s -o /dev/null -w "%{http_code}"` against the raw URL settles it. Reporting a URL you have not resolved is the "claimed success without doing the thing" failure that [TESTING.md](../../../TESTING.md) asks reporters to look for, committed by the skill itself.

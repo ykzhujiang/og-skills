@@ -35,6 +35,14 @@ One run of the skill against one **Discussion**. Creation counts as session 1.
 A `<details>` block. Detail a human can reach in one click and an agent always reads in full. A fold is a display default, never a deletion — nothing is dropped to make the headline fit.
 _Avoid_: collapse, hide, truncate
 
+**Compressed / Expanded**:
+The two tiers of a **reply to the user** during grilling, in that order. **Compressed** is the whole frontier as a table, one line per question with its recommended answer, actionable without reading on. **Expanded** is the reasoning, one block per question, plain language before terminology. The same split as **Headline** and **Fold**, applied to the conversation rather than to the thread.
+_Avoid_: short version, TL;DR, detail section
+
+**Closure**:
+The check, at publish time, that a **Top post**'s stated question and its current thinking are a recognisable pair. Replaces a gate on the starting point: a **Discussion** may begin with no question, but may not be published pretending to answer one. "No question found yet" is a valid closed state.
+_Avoid_: validation, gate, completeness check
+
 **agent-state**:
 An HTML-comment block at the top of the **Top post** holding machine-readable state (slug, session count, participants, counts). Rebuildable from observable signals if a human deletes it — never load-bearing.
 _Avoid_: metadata, frontmatter, header
