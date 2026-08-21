@@ -4,7 +4,7 @@ Agent skills for carrying **intent** between people, sessions, and agents.
 
 A conversation where you figured something out is worth more than the code it produced — and it is the thing we routinely throw away. These skills interrogate a fuzzy idea until it has a shape, then park that shape somewhere a teammate, a later session, or somebody else's agent can pick it up **without anyone re-explaining it**.
 
-> **Status: v0.1.0, unproven.** The publish mechanics are verified against a live repo; the end-to-end path is not. Read [TESTING.md](./TESTING.md) before you trust it — it lists exactly what has been exercised and what has not.
+> **Status: v0.2.0, lightly proven.** The publish mechanics and — as of 2026-08-22 — the full grill-then-publish path have been exercised against a live repo. Multi-party use has not. Read [TESTING.md](./TESTING.md) before you trust it: it lists what has been exercised, what has not, and the four places an agent deviated from the instructions.
 
 ## Install
 
@@ -75,7 +75,9 @@ Three artefacts with three jobs, and no restating between them:
 
 Transcripts land under `discussions/<slug>/<date-time>.md` — grouped by **topic**, not by session, because one topic spans many sessions and one session covers many topics. Only the increment is uploaded each time; the watermark sits in the file header.
 
-**Nothing is published without your go-ahead.** The skill shows you the body, the upload range, and anything it judges sensitive — then waits.
+**Nothing is published without your go-ahead.** The skill shows you the body, the upload range, and anything it judges sensitive — then waits. If you answer about something else and leave a flagged item hanging, it either asks again or acts on the default it already stated **and tells you it did so** — silence is never quietly read as consent.
+
+Before that, it checks **closure**: that what the thread claims to be about and what it concluded are actually a pair. A discussion may start with no question at all — that is deliberate — but it may not be published pretending to answer one.
 
 Every AI-written post carries a `📝 代写` byline, so **a human reply is distinguishable by its absence**. That is a convention rather than a guarantee: the GitHub author field shows whoever's token was used, so it cannot do this job.
 
@@ -93,7 +95,7 @@ The split exploits the fact that agents read raw markdown while humans read rend
 
 ### User-invoked
 
-- **[discuss](./skills/productivity/discuss/SKILL.md)** — grill an idea into shape, then publish it. The front door; the other two do the work.
+- **[discuss](./skills/productivity/discuss/SKILL.md)** — grill an idea into shape, then publish it. The front door; the other two do the work. Also holds the overrides on `grilling` that cannot live in `grilling` itself because it is vendored: ungated starting point, no root-cause digging, two-tier replies, and hand the user the links when it lands.
 
 ### Model-invoked
 
@@ -111,6 +113,10 @@ The top post carries `Settled` / `Still open` / `Ruled out` / `Disagreement`. `R
 - [Why GitHub Discussions and not files in the repo](./.agents/adr/0001-discussions-not-repo-files.md)
 - [Why the concurrency guard compares `lastEditedAt`](./.agents/adr/0002-lasteditedat-not-updatedat.md)
 - [Why `grilling` is vendored](./.agents/adr/0003-vendor-grilling.md)
+- [Why the starting point is not gated](./.agents/adr/0007-no-gate-on-the-starting-point.md) — and why the check moved to publish time
+- [Why there is no digging for a root problem](./.agents/adr/0008-no-single-root-problem.md)
+- [Why the top post stays single-writer](./.agents/adr/0009-top-post-stays-single-writer.md) — including the option rejected and the risk kept
+- [Why the byline has no mechanical check](./.agents/adr/0010-byline-stays-a-convention.md)
 - [User-invoked vs model-invoked](./.agents/invocation.md) — convention adapted from Matt Pocock's repo
 
 ## Licence
